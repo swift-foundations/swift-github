@@ -10,6 +10,6 @@ import Testing
 
 @Test
 func testGitHub() async throws {
-  // Placeholder test
-  #expect(true)
+    // Placeholder test
+    #expect(true)
 }
