@@ -6,35 +6,31 @@
 //
 
 import Dependencies
-import DependenciesMacros
 import GitHub_Types_Shared
 
 extension GitHub.OAuth {
-    @DependencyClient
+    @Witness
     public struct Client: @unchecked Sendable {
         /// Exchange authorization code for access token
-        @DependencyEndpoint
         public var exchangeCode:
             (
                 _ clientId: String,
                 _ clientSecret: String,
                 _ code: String,
                 _ redirectUri: String?
-            ) async throws -> GitHub.OAuth.TokenResponse
+            ) async throws(Witness.Unimplemented.Error) -> GitHub.OAuth.TokenResponse
 
         /// Get authenticated user information
-        @DependencyEndpoint
         public var getAuthenticatedUser:
             (
                 _ accessToken: String
-            ) async throws -> GitHub.OAuth.User
+            ) async throws(Witness.Unimplemented.Error) -> GitHub.OAuth.User
 
         /// Get user's primary email addresses
-        @DependencyEndpoint
         public var getUserEmails:
             (
                 _ accessToken: String
-            ) async throws -> [Email]
+            ) async throws(Witness.Unimplemented.Error) -> [Email]
 
         public struct Email: Codable, Sendable {
             public let email: String
