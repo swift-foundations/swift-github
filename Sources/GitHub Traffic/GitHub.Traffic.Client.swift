@@ -8,25 +8,21 @@
 import GitHub_Types_Shared
 
 extension GitHub.Traffic {
-    @DependencyClient
+    @Witness
     public struct Client: Sendable {
         // https://docs.github.com/en/rest/metrics/traffic#get-repository-views
-        @DependencyEndpoint
         public var views:
-            @Sendable (_ owner: String, _ repo: String, _ per: Per?) async throws -> Views.Response
+            @Sendable (_ owner: String, _ repo: String, _ per: Per?) async throws(Witness.Unimplemented.Error) -> Views.Response
 
         // https://docs.github.com/en/rest/metrics/traffic#get-repository-clones
-        @DependencyEndpoint
         public var clones:
-            @Sendable (_ owner: String, _ repo: String, _ per: Per?) async throws -> Clones.Response
+            @Sendable (_ owner: String, _ repo: String, _ per: Per?) async throws(Witness.Unimplemented.Error) -> Clones.Response
 
         // https://docs.github.com/en/rest/metrics/traffic#get-top-referral-paths
-        @DependencyEndpoint
-        public var paths: @Sendable (_ owner: String, _ repo: String) async throws -> Paths.Response
+        public var paths: @Sendable (_ owner: String, _ repo: String) async throws(Witness.Unimplemented.Error) -> Paths.Response
 
         // https://docs.github.com/en/rest/metrics/traffic#get-top-referral-sources
-        @DependencyEndpoint
         public var referrers:
-            @Sendable (_ owner: String, _ repo: String) async throws -> Referrers.Response
+            @Sendable (_ owner: String, _ repo: String) async throws(Witness.Unimplemented.Error) -> Referrers.Response
     }
 }

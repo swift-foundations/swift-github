@@ -6,16 +6,14 @@
 //
 
 import Dependencies
-import DependenciesMacros
 import GitHub_Types_Shared
 
 extension GitHub.Stargazers {
-    @DependencyClient
+    @Witness
     public struct Client: Sendable {
         // https://docs.github.com/en/rest/activity/starring#list-stargazers
-        @DependencyEndpoint
         public var list:
-            @Sendable (_ owner: String, _ repo: String, _ request: List.Request?) async throws ->
+            @Sendable (_ owner: String, _ repo: String, _ request: List.Request?) async throws(Witness.Unimplemented.Error) ->
                 List.Response
     }
 }

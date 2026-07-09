@@ -8,31 +8,26 @@
 import GitHub_Types_Shared
 
 extension GitHub.Repositories {
-    @DependencyClient
+    @Witness
     public struct Client: Sendable {
         // https://docs.github.com/en/rest/repos/repos#list-repositories-for-the-authenticated-user
-        @DependencyEndpoint
-        public var list: @Sendable (_ request: List.Request?) async throws -> List.Response
+        public var list: @Sendable (_ request: List.Request?) async throws(Witness.Unimplemented.Error) -> List.Response
 
         // https://docs.github.com/en/rest/repos/repos#get-a-repository
-        @DependencyEndpoint
         public var get:
-            @Sendable (_ owner: String, _ repo: String) async throws -> GitHub.Repository
+            @Sendable (_ owner: String, _ repo: String) async throws(Witness.Unimplemented.Error) -> GitHub.Repository
 
         // https://docs.github.com/en/rest/repos/repos#create-a-repository-for-the-authenticated-user
-        @DependencyEndpoint
-        public var create: @Sendable (_ request: Create.Request) async throws -> GitHub.Repository
+        public var create: @Sendable (_ request: Create.Request) async throws(Witness.Unimplemented.Error) -> GitHub.Repository
 
         // https://docs.github.com/en/rest/repos/repos#update-a-repository
-        @DependencyEndpoint
         public var update:
-            @Sendable (_ owner: String, _ repo: String, _ request: Update.Request) async throws ->
+            @Sendable (_ owner: String, _ repo: String, _ request: Update.Request) async throws(Witness.Unimplemented.Error) ->
                 GitHub.Repository
 
         // https://docs.github.com/en/rest/repos/repos#delete-a-repository
-        @DependencyEndpoint
         public var delete:
-            @Sendable (_ owner: String, _ repo: String) async throws -> Delete.Response
+            @Sendable (_ owner: String, _ repo: String) async throws(Witness.Unimplemented.Error) -> Delete.Response
     }
 }
 
