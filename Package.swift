@@ -1,4 +1,4 @@
-// swift-tools-version:6.0
+// swift-tools-version: 6.3.1
 
 import Foundation
 import PackageDescription
@@ -22,15 +22,13 @@ extension Target.Dependency {
     static var githubTrafficLive: Self { .product(name: "GitHub Traffic Live", package: "swift-github-live") }
     static var githubRepositoriesLive: Self { .product(name: "GitHub Repositories Live", package: "swift-github-live") }
     static var githubLiveShared: Self { .product(name: "GitHub Live Shared", package: "swift-github-live") }
-    
-    static var dependenciesMacros: Self { .product(name: "DependenciesMacros", package: "swift-dependencies") }
 }
 
 let package = Package(
     name: "swift-github",
     platforms: [
-        .macOS(.v14),
-        .iOS(.v17)
+        .macOS(.v26),
+        .iOS(.v26)
     ],
     products: [
         .library(name: .github, targets: [.github]),
@@ -39,15 +37,14 @@ let package = Package(
         .library(name: .githubShared, targets: [.githubShared])
     ],
     dependencies: [
-        .package(url: "https://github.com/coenttb/swift-github-live", from: "0.0.1"),
-        .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.6.0"),
+        .package(url: "https://github.com/swift-foundations/swift-github-live.git", branch: "main"),
+        .package(url: "https://github.com/swift-foundations/swift-dependencies.git", branch: "main"),
     ],
     targets: [
         .target(
             name: .githubShared,
             dependencies: [
-                .githubLiveShared,
-                .dependenciesMacros
+                .githubLiveShared
             ]
         ),
         .target(
@@ -57,23 +54,20 @@ let package = Package(
                 .githubLive,
                 .githubTraffic,
                 .githubRepositories,
-                .dependenciesMacros,
             ]
         ),
         .target(
             name: .githubTraffic,
             dependencies: [
                 .githubShared,
-                .githubTrafficLive,
-                .dependenciesMacros
+                .githubTrafficLive
             ]
         ),
         .target(
             name: .githubRepositories,
             dependencies: [
                 .githubShared,
-                .githubRepositoriesLive,
-                .dependenciesMacros
+                .githubRepositoriesLive
             ]
         ),
         .testTarget(
