@@ -18,19 +18,19 @@ extension GitHub.OAuth {
                 _ clientSecret: String,
                 _ code: String,
                 _ redirectUri: String?
-            ) async throws(Witness.Unimplemented.Error) -> GitHub.OAuth.TokenResponse
+            ) async throws(any Swift.Error) -> GitHub.OAuth.TokenResponse
 
         /// Get authenticated user information
         public var getAuthenticatedUser:
             (
                 _ accessToken: String
-            ) async throws(Witness.Unimplemented.Error) -> GitHub.OAuth.User
+            ) async throws(any Swift.Error) -> GitHub.OAuth.User
 
         /// Get user's primary email addresses
         public var getUserEmails:
             (
                 _ accessToken: String
-            ) async throws(Witness.Unimplemented.Error) -> [Email]
+            ) async throws(any Swift.Error) -> [Email]
 
         public struct Email: Codable, Sendable {
             public let email: String
