@@ -11,23 +11,23 @@ extension GitHub.Repositories {
     @Witness
     public struct Client: Sendable {
         // https://docs.github.com/en/rest/repos/repos#list-repositories-for-the-authenticated-user
-        public var list: @Sendable (_ request: List.Request?) async throws(Witness.Unimplemented.Error) -> List.Response
+        public var list: @Sendable (_ request: List.Request?) async throws(any Swift.Error) -> List.Response
 
         // https://docs.github.com/en/rest/repos/repos#get-a-repository
         public var get:
-            @Sendable (_ owner: String, _ repo: String) async throws(Witness.Unimplemented.Error) -> GitHub.Repository
+            @Sendable (_ owner: String, _ repo: String) async throws(any Swift.Error) -> GitHub.Repository
 
         // https://docs.github.com/en/rest/repos/repos#create-a-repository-for-the-authenticated-user
-        public var create: @Sendable (_ request: Create.Request) async throws(Witness.Unimplemented.Error) -> GitHub.Repository
+        public var create: @Sendable (_ request: Create.Request) async throws(any Swift.Error) -> GitHub.Repository
 
         // https://docs.github.com/en/rest/repos/repos#update-a-repository
         public var update:
-            @Sendable (_ owner: String, _ repo: String, _ request: Update.Request) async throws(Witness.Unimplemented.Error) ->
+            @Sendable (_ owner: String, _ repo: String, _ request: Update.Request) async throws(any Swift.Error) ->
                 GitHub.Repository
 
         // https://docs.github.com/en/rest/repos/repos#delete-a-repository
         public var delete:
-            @Sendable (_ owner: String, _ repo: String) async throws(Witness.Unimplemented.Error) -> Delete.Response
+            @Sendable (_ owner: String, _ repo: String) async throws(any Swift.Error) -> Delete.Response
     }
 }
 

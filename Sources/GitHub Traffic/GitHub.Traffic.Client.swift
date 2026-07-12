@@ -12,17 +12,17 @@ extension GitHub.Traffic {
     public struct Client: Sendable {
         // https://docs.github.com/en/rest/metrics/traffic#get-repository-views
         public var views:
-            @Sendable (_ owner: String, _ repo: String, _ per: Per?) async throws(Witness.Unimplemented.Error) -> Views.Response
+            @Sendable (_ owner: String, _ repo: String, _ per: Per?) async throws(any Swift.Error) -> Views.Response
 
         // https://docs.github.com/en/rest/metrics/traffic#get-repository-clones
         public var clones:
-            @Sendable (_ owner: String, _ repo: String, _ per: Per?) async throws(Witness.Unimplemented.Error) -> Clones.Response
+            @Sendable (_ owner: String, _ repo: String, _ per: Per?) async throws(any Swift.Error) -> Clones.Response
 
         // https://docs.github.com/en/rest/metrics/traffic#get-top-referral-paths
-        public var paths: @Sendable (_ owner: String, _ repo: String) async throws(Witness.Unimplemented.Error) -> Paths.Response
+        public var paths: @Sendable (_ owner: String, _ repo: String) async throws(any Swift.Error) -> Paths.Response
 
         // https://docs.github.com/en/rest/metrics/traffic#get-top-referral-sources
         public var referrers:
-            @Sendable (_ owner: String, _ repo: String) async throws(Witness.Unimplemented.Error) -> Referrers.Response
+            @Sendable (_ owner: String, _ repo: String) async throws(any Swift.Error) -> Referrers.Response
     }
 }

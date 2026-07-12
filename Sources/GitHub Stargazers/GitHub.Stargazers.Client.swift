@@ -13,7 +13,7 @@ extension GitHub.Stargazers {
     public struct Client: Sendable {
         // https://docs.github.com/en/rest/activity/starring#list-stargazers
         public var list:
-            @Sendable (_ owner: String, _ repo: String, _ request: List.Request?) async throws(Witness.Unimplemented.Error) ->
+            @Sendable (_ owner: String, _ repo: String, _ request: List.Request?) async throws(any Swift.Error) ->
                 List.Response
     }
 }
