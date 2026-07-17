@@ -9,7 +9,7 @@ import GitHub_Traffic
 import Testing
 
 @Test
-func testGitHubTraffic() async throws {
+func `Git Hub Traffic`() async throws {
     // Placeholder test
     #expect(true)
 }

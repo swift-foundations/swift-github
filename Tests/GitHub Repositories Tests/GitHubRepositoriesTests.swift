@@ -9,7 +9,7 @@ import GitHub_Repositories
 import Testing
 
 @Test
-func testGitHubRepositories() async throws {
+func `Git Hub Repositories`() async throws {
     // Placeholder test
     #expect(true)
 }

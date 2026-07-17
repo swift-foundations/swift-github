@@ -10,11 +10,11 @@ import GitHub
 import GitHub_Types_Shared
 import Testing
 
-@Suite("README Verification")
-struct ReadmeVerificationTests {
+@Suite
+struct Test {
 
-    @Test("Traffic Analytics - API structure verification")
-    func testTrafficAPIStructure() async throws {
+    @Test
+    func `Traffic Analytics - API structure verification`() async throws {
         // This test verifies the API structure shown in README examples
         let mockClient = GitHub.Client(
             traffic: .init(
@@ -45,8 +45,8 @@ struct ReadmeVerificationTests {
         #expect(referrers.referrers.isEmpty)
     }
 
-    @Test("Testing with Mocks - withDependencies pattern")
-    func testWithDependenciesPattern() async throws {
+    @Test
+    func `Testing with Mocks - withDependencies pattern`() async throws {
         // Verify the mocking pattern shown in README works correctly
         let mockClient = GitHub.Client(
             traffic: .init(
