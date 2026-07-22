@@ -150,6 +150,8 @@ extension GitHub.Organization.Repositories {
                 id: .init(rawValue: id),
                 name: .init(rawValue: name),
                 archived: false,
+                disabled: false,
+                fork: false,
                 visibility: .public
             )
         }
