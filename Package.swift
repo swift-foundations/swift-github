@@ -18,10 +18,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(
-            url: "https://github.com/swift-standards/swift-github-standard.git",
-            branch: "main"
-        )
+        .package(path: "../../swift-standards/swift-github-standard")
     ],
     targets: [
         .target(

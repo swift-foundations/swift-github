@@ -1,0 +1,83 @@
+import Testing
+
+@testable import GitHub
+
+extension GitHub.Repository.Traffic {
+    @Suite("GitHub.Repository.Traffic.Client.Unit")
+    struct Core {
+        @Test("Each traffic endpoint is a typed one-call capability")
+        func capabilities() async throws {
+            let client = Client<GitHub.Repository.ProviderFailure>(
+                views: { _ async throws(GitHub.Repository.ProviderFailure) in
+                    .init(count: 1, uniques: 1, views: [])
+                },
+                clones: { _ async throws(GitHub.Repository.ProviderFailure) in
+                    .init(count: 2, uniques: 2, clones: [])
+                },
+                paths: { _ async throws(GitHub.Repository.ProviderFailure) in
+                    .init(paths: [])
+                },
+                referrers: { _ async throws(GitHub.Repository.ProviderFailure) in
+                    .init(referrers: [])
+                }
+            )
+            let owner = GitHub.Owner.Login(rawValue: "swiftlang")
+            let repository = GitHub.Repository.Name(rawValue: "swift")
+
+            let views = try await client.views(
+                .init(owner: owner, repository: repository, interval: .day)
+            )
+            let clones = try await client.clones(
+                .init(owner: owner, repository: repository, interval: .week)
+            )
+            let paths = try await client.paths(
+                .init(owner: owner, repository: repository)
+            )
+            let referrers = try await client.referrers(
+                .init(owner: owner, repository: repository)
+            )
+
+            #expect(views.count == 1)
+            #expect(clones.count == 2)
+            #expect(paths.paths.isEmpty)
+            #expect(referrers.referrers.isEmpty)
+        }
+
+        @Test("Traffic endpoint failures remain typed")
+        func failure() async {
+            let client = Client<GitHub.Repository.ProviderFailure>(
+                views: { (_: Views.Request) async throws(GitHub.Repository.ProviderFailure) -> Views.Response in
+                    throw .expected
+                },
+                clones: { (_: Clones.Request) async throws(GitHub.Repository.ProviderFailure) -> Clones.Response in
+                    throw .expected
+                },
+                paths: { (_: Paths.Request) async throws(GitHub.Repository.ProviderFailure) -> Paths.Response in
+                    throw .expected
+                },
+                referrers: { (_: Referrers.Request) async throws(GitHub.Repository.ProviderFailure) -> Referrers.Response in
+                    throw .expected
+                }
+            )
+            let owner = GitHub.Owner.Login(rawValue: "swiftlang")
+            let repository = GitHub.Repository.Name(rawValue: "swift")
+
+            let views = Views.Request(owner: owner, repository: repository)
+            let clones = Clones.Request(owner: owner, repository: repository)
+            let paths = Paths.Request(owner: owner, repository: repository)
+            let referrers = Referrers.Request(owner: owner, repository: repository)
+            await #expect(throws: GitHub.Repository.ProviderFailure.expected) {
+                try await client.views(views)
+            }
+            await #expect(throws: GitHub.Repository.ProviderFailure.expected) {
+                try await client.clones(clones)
+            }
+            await #expect(throws: GitHub.Repository.ProviderFailure.expected) {
+                try await client.paths(paths)
+            }
+            await #expect(throws: GitHub.Repository.ProviderFailure.expected) {
+                try await client.referrers(referrers)
+            }
+        }
+    }
+}

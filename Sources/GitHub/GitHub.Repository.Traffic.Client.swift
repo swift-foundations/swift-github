@@ -1,28 +1,24 @@
-//
-//  GitHub.Traffic.Client.swift
-//  swift-github-types
-//
-//  Created by Coen ten Thije Boonkkamp on 22/08/2025.
-//
-
-import GitHub_Types_Shared
-
-extension GitHub.Traffic {
-    @Witness
-    public struct Client: Sendable {
-        // https://docs.github.com/en/rest/metrics/traffic#get-repository-views
+extension GitHub.Repository.Traffic {
+    public struct Client<Failure: Swift.Error & Sendable>: Sendable {
         public var views:
-            @Sendable (_ owner: String, _ repo: String, _ per: Per?) async throws(any Swift.Error) -> Views.Response
-
-        // https://docs.github.com/en/rest/metrics/traffic#get-repository-clones
+            @Sendable (Views.Request) async throws(Failure) -> Views.Response
         public var clones:
-            @Sendable (_ owner: String, _ repo: String, _ per: Per?) async throws(any Swift.Error) -> Clones.Response
-
-        // https://docs.github.com/en/rest/metrics/traffic#get-top-referral-paths
-        public var paths: @Sendable (_ owner: String, _ repo: String) async throws(any Swift.Error) -> Paths.Response
-
-        // https://docs.github.com/en/rest/metrics/traffic#get-top-referral-sources
+            @Sendable (Clones.Request) async throws(Failure) -> Clones.Response
+        public var paths:
+            @Sendable (Paths.Request) async throws(Failure) -> Paths.Response
         public var referrers:
-            @Sendable (_ owner: String, _ repo: String) async throws(any Swift.Error) -> Referrers.Response
+            @Sendable (Referrers.Request) async throws(Failure) -> Referrers.Response
+
+        public init(
+            views: @escaping @Sendable (Views.Request) async throws(Failure) -> Views.Response,
+            clones: @escaping @Sendable (Clones.Request) async throws(Failure) -> Clones.Response,
+            paths: @escaping @Sendable (Paths.Request) async throws(Failure) -> Paths.Response,
+            referrers: @escaping @Sendable (Referrers.Request) async throws(Failure) -> Referrers.Response
+        ) {
+            self.views = views
+            self.clones = clones
+            self.paths = paths
+            self.referrers = referrers
+        }
     }
 }
