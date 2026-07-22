@@ -65,6 +65,12 @@ Repository lookup and authenticated-user repository listing use
 `GitHub.Repository.Get.Client` and `GitHub.User.Repositories.Client`.
 Timestamped stars use `GitHub.Repository.Stargazers.Client`.
 
+OAuth authorization and token exchange use
+`GitHub.OAuth.Authorization.Client` and `GitHub.OAuth.Token.Exchange.Client`.
+The supporting Users API operations remain
+`GitHub.User.Authenticated.Get.Client` and
+`GitHub.User.Authenticated.Emails.List.Client`.
+
 Paginated repository and stargazer traversal requires explicit page and item
 limits. Traversal observes task cancellation and fails on client errors, page
 cycles, or exceeded bounds rather than returning an incomplete result.
