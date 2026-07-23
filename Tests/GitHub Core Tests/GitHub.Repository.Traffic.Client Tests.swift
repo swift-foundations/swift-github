@@ -6,18 +6,18 @@ extension GitHub.Repository.Traffic {
     @Suite("GitHub.Repository.Traffic.Client.Unit")
     struct Core {
         @Test("Each traffic endpoint is a typed one-call capability")
-        func capabilities() async throws {
-            let client = Client<GitHub.Repository.ProviderFailure>(
-                views: { _ async throws(GitHub.Repository.ProviderFailure) in
+        func capabilities() async throws(GitHub.Repository.Fixture.Failure) {
+            let client = Client<GitHub.Repository.Fixture.Failure>(
+                views: { _ async throws(GitHub.Repository.Fixture.Failure) in
                     .init(count: 1, uniques: 1, views: [])
                 },
-                clones: { _ async throws(GitHub.Repository.ProviderFailure) in
+                clones: { _ async throws(GitHub.Repository.Fixture.Failure) in
                     .init(count: 2, uniques: 2, clones: [])
                 },
-                paths: { _ async throws(GitHub.Repository.ProviderFailure) in
+                paths: { _ async throws(GitHub.Repository.Fixture.Failure) in
                     .init(paths: [])
                 },
-                referrers: { _ async throws(GitHub.Repository.ProviderFailure) in
+                referrers: { _ async throws(GitHub.Repository.Fixture.Failure) in
                     .init(referrers: [])
                 }
             )
@@ -45,17 +45,17 @@ extension GitHub.Repository.Traffic {
 
         @Test("Traffic endpoint failures remain typed")
         func failure() async {
-            let client = Client<GitHub.Repository.ProviderFailure>(
-                views: { (_: Views.Request) async throws(GitHub.Repository.ProviderFailure) -> Views.Response in
+            let client = Client<GitHub.Repository.Fixture.Failure>(
+                views: { (_: Views.Request) async throws(GitHub.Repository.Fixture.Failure) -> Views.Response in
                     throw .expected
                 },
-                clones: { (_: Clones.Request) async throws(GitHub.Repository.ProviderFailure) -> Clones.Response in
+                clones: { (_: Clones.Request) async throws(GitHub.Repository.Fixture.Failure) -> Clones.Response in
                     throw .expected
                 },
-                paths: { (_: Paths.Request) async throws(GitHub.Repository.ProviderFailure) -> Paths.Response in
+                paths: { (_: Paths.Request) async throws(GitHub.Repository.Fixture.Failure) -> Paths.Response in
                     throw .expected
                 },
-                referrers: { (_: Referrers.Request) async throws(GitHub.Repository.ProviderFailure) -> Referrers.Response in
+                referrers: { (_: Referrers.Request) async throws(GitHub.Repository.Fixture.Failure) -> Referrers.Response in
                     throw .expected
                 }
             )
@@ -66,16 +66,16 @@ extension GitHub.Repository.Traffic {
             let clones = Clones.Request(owner: owner, repository: repository)
             let paths = Paths.Request(owner: owner, repository: repository)
             let referrers = Referrers.Request(owner: owner, repository: repository)
-            await #expect(throws: GitHub.Repository.ProviderFailure.expected) {
+            await #expect(throws: GitHub.Repository.Fixture.Failure.expected) {
                 try await client.views(views)
             }
-            await #expect(throws: GitHub.Repository.ProviderFailure.expected) {
+            await #expect(throws: GitHub.Repository.Fixture.Failure.expected) {
                 try await client.clones(clones)
             }
-            await #expect(throws: GitHub.Repository.ProviderFailure.expected) {
+            await #expect(throws: GitHub.Repository.Fixture.Failure.expected) {
                 try await client.paths(paths)
             }
-            await #expect(throws: GitHub.Repository.ProviderFailure.expected) {
+            await #expect(throws: GitHub.Repository.Fixture.Failure.expected) {
                 try await client.referrers(referrers)
             }
         }

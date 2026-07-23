@@ -1,5 +1,5 @@
 extension GitHub.Repository.Traffic {
-    public struct Client<Failure: Swift.Error & Sendable>: Sendable {
+    public struct Client<Failure: Swift.Error>: Sendable {
         public var views:
             @Sendable (Views.Request) async throws(Failure) -> Views.Response
         public var clones:

@@ -1,5 +1,5 @@
 extension GitHub.Organization.Repositories.Traversal {
-    public enum Error<Failure: Swift.Error & Sendable>: Swift.Error, Sendable {
+    public enum Error<Failure: Swift.Error>: Swift.Error, Sendable {
         case cancellation
         case client(Failure)
         case cycle

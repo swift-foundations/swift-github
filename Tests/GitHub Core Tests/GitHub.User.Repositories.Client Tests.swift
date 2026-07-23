@@ -6,11 +6,19 @@ extension GitHub.User.Repositories {
     @Suite("GitHub.User.Repositories.Client.Unit")
     struct Core {
         @Test("Traversal follows authenticated-user repository pages")
-        func traversal() async throws {
-            let second = try #require(GitHub.Page.Number(rawValue: 2))
-            let client = Client<GitHub.Repository.ProviderFailure> {
-                (request: Request) async throws(GitHub.Repository.ProviderFailure)
-                    -> Client<GitHub.Repository.ProviderFailure>.Page in
+        func traversal() async throws(
+            Traversal.Error<GitHub.Repository.Fixture.Failure>
+        ) {
+            guard let second = GitHub.Page.Number(rawValue: 2) else {
+                Issue.record("invalid page fixture")
+                return
+            }
+            let client = Client<GitHub.Repository.Fixture.Failure> {
+                (request: Request) async throws(GitHub.Repository.Fixture.Failure)
+                    -> Client<GitHub.Repository.Fixture.Failure>.Page in
+                // swift-linter:disable:next raw value access
+                // REASON: the fixture pages by the newtype's raw wire number —
+                //   the test's purpose is the paging boundary itself.
                 switch request.page?.rawValue {
                 case 1:
                     return .init(
@@ -25,28 +33,32 @@ extension GitHub.User.Repositories {
             }
 
             let first = Request(page: .first, size: .maximum)
-            let repositories = try await client.all(
-                first,
-                limit: try self.limit(pages: 2, items: 1)
-            )
+            let limit: GitHub.User.Repositories.Traversal.Limit
+            do throws(GitHub.Repository.Fixture.Failure) {
+                limit = try self.limit(pages: 2, items: 1)
+            } catch {
+                Issue.record("invalid traversal limit fixture: \(error)")
+                return
+            }
+            let repositories = try await client.all(first, limit: limit)
             #expect(repositories.isEmpty)
         }
 
         @Test("Traversal reports typed client, cycle, page, and cancellation failures")
-        func failures() async throws {
+        func failures() async {
             let request = GitHub.User.Repositories.Request(
                 page: .first,
                 size: .maximum
             )
-            let failing = Client<GitHub.Repository.ProviderFailure> {
-                (_: Request) async throws(GitHub.Repository.ProviderFailure)
-                    -> Client<GitHub.Repository.ProviderFailure>.Page in
+            let failing = Client<GitHub.Repository.Fixture.Failure> {
+                (_: Request) async throws(GitHub.Repository.Fixture.Failure)
+                    -> Client<GitHub.Repository.Fixture.Failure>.Page in
                 throw .expected
             }
             await #expect(
                 throws:
                     GitHub.User.Repositories.Traversal.Error<
-                        GitHub.Repository.ProviderFailure
+                        GitHub.Repository.Fixture.Failure
                     >.client(.expected)
             ) {
                 try await failing.all(
@@ -55,15 +67,15 @@ extension GitHub.User.Repositories {
                 )
             }
 
-            let cycling = Client<GitHub.Repository.ProviderFailure> {
-                (_: Request) async throws(GitHub.Repository.ProviderFailure)
-                    -> Client<GitHub.Repository.ProviderFailure>.Page in
+            let cycling = Client<GitHub.Repository.Fixture.Failure> {
+                (_: Request) async throws(GitHub.Repository.Fixture.Failure)
+                    -> Client<GitHub.Repository.Fixture.Failure>.Page in
                 .init(response: .init(repositories: []), next: request)
             }
             await #expect(
                 throws:
                     GitHub.User.Repositories.Traversal.Error<
-                        GitHub.Repository.ProviderFailure
+                        GitHub.Repository.Fixture.Failure
                     >.cycle
             ) {
                 try await cycling.all(
@@ -74,7 +86,7 @@ extension GitHub.User.Repositories {
             await #expect(
                 throws:
                     GitHub.User.Repositories.Traversal.Error<
-                        GitHub.Repository.ProviderFailure
+                        GitHub.Repository.Fixture.Failure
                     >.pages
             ) {
                 try await cycling.all(
@@ -93,7 +105,7 @@ extension GitHub.User.Repositories {
             await #expect(
                 throws:
                     GitHub.User.Repositories.Traversal.Error<
-                        GitHub.Repository.ProviderFailure
+                        GitHub.Repository.Fixture.Failure
                     >.cancellation
             ) {
                 try await task.value
@@ -103,13 +115,17 @@ extension GitHub.User.Repositories {
         private func limit(
             pages: UInt,
             items: UInt
-        ) throws -> GitHub.User.Repositories.Traversal.Limit {
-            let pages = try #require(
-                GitHub.User.Repositories.Traversal.Limit.Pages(rawValue: pages)
-            )
-            let items = try #require(
-                GitHub.User.Repositories.Traversal.Limit.Items(rawValue: items)
-            )
+        ) throws(GitHub.Repository.Fixture.Failure)
+            -> GitHub.User.Repositories.Traversal.Limit
+        {
+            guard
+                let pages = GitHub.User.Repositories.Traversal.Limit.Pages(
+                    rawValue: pages
+                ),
+                let items = GitHub.User.Repositories.Traversal.Limit.Items(
+                    rawValue: items
+                )
+            else { throw .unexpected }
             return .init(pages: pages, items: items)
         }
     }

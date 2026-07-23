@@ -7,10 +7,10 @@ extension GitHub.Repository.Get {
     struct Core {
         @Test("Repository lookup preserves its typed failure")
         func failure() async {
-            let client = Client<GitHub.Repository.ProviderFailure> {
-                (request: Request) async throws(GitHub.Repository.ProviderFailure) -> Response in
-                #expect(request.owner.rawValue == "swiftlang")
-                #expect(request.repository.rawValue == "swift")
+            let client = Client<GitHub.Repository.Fixture.Failure> {
+                (request: Request) async throws(GitHub.Repository.Fixture.Failure) -> Response in
+                #expect(request.owner == .init(rawValue: "swiftlang"))
+                #expect(request.repository == .init(rawValue: "swift"))
                 throw .expected
             }
 
@@ -18,7 +18,7 @@ extension GitHub.Repository.Get {
                 owner: .init(rawValue: "swiftlang"),
                 repository: .init(rawValue: "swift")
             )
-            await #expect(throws: GitHub.Repository.ProviderFailure.expected) {
+            await #expect(throws: GitHub.Repository.Fixture.Failure.expected) {
                 try await client.get(request)
             }
         }

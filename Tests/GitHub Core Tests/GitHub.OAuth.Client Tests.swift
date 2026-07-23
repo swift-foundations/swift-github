@@ -7,7 +7,7 @@ extension GitHub.OAuth {
     @Suite("GitHub.OAuth.Client.Unit")
     struct Core {
         @Test("Authorization preserves its typed failure")
-        func authorization() throws {
+        func authorization() throws(RFC_3986.Error) {
             let client = Authorization.Client<Fixture.Failure> {
                 (request: Authorization.Request) throws(Fixture.Failure) in
                 #expect(request.clientID == "client-id")

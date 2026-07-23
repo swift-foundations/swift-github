@@ -1,5 +1,5 @@
 extension GitHub.User.Authenticated.Get {
-    public struct Client<Failure: Swift.Error & Sendable>: Sendable {
+    public struct Client<Failure: Swift.Error>: Sendable {
         public var get: @Sendable (Request) async throws(Failure) -> Response
 
         public init(
