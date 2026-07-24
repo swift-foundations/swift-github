@@ -13,8 +13,8 @@ extension GitHub.Repository.Stargazers {
                 Issue.record("invalid page fixture")
                 return
             }
-            let owner = GitHub.Owner.Login(rawValue: "swiftlang")
-            let repository = GitHub.Repository.Name(rawValue: "swift")
+            let owner = GitHub.Owner.Login("swiftlang")
+            let repository = GitHub.Repository.Name("swift")
             let client = Client<GitHub.Repository.Fixture.Failure> {
                 (request: Request) async throws(GitHub.Repository.Fixture.Failure)
                     -> Client<GitHub.Repository.Fixture.Failure>.Page in
@@ -59,8 +59,8 @@ extension GitHub.Repository.Stargazers {
         @Test("Traversal reports typed client, cycle, page, and cancellation failures")
         func failures() async {
             let request = GitHub.Repository.Stargazers.Request(
-                owner: .init(rawValue: "swiftlang"),
-                repository: .init(rawValue: "swift"),
+                owner: .init("swiftlang"),
+                repository: .init("swift"),
                 page: .first,
                 size: .maximum
             )

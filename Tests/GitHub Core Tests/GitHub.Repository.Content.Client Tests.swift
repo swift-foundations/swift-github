@@ -8,7 +8,7 @@ extension GitHub.Repository.Content {
         @Test("The client preserves present and absent provider content")
         func presence() async throws {
             let client = Client<Fixture.Failure> { request in
-                request.repository.rawValue == "swift-package"
+                request.repository.underlying == "swift-package"
                     ? .init(kind: .file)
                     : nil
             }
@@ -32,8 +32,8 @@ extension GitHub.Repository.Content {
         private func request(_ repository: String) throws(Fixture.Failure) -> Request {
             guard let path = Path(segments: ["Package.swift"]) else { throw .unexpected }
             return .init(
-                organization: .init(rawValue: "swift-foundations"),
-                repository: .init(rawValue: repository),
+                organization: .init("swift-foundations"),
+                repository: .init(repository),
                 path: path
             )
         }

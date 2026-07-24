@@ -14,12 +14,12 @@ extension GitHub.Organization.Repositories {
                 limit: self.bounds(pages: 2, items: 4),
                 duplicate: .preserve,
                 order: .init {
-                    $0.sorted { $0.name.rawValue < $1.name.rawValue }
+                    $0.sorted { $0.name.underlying < $1.name.underlying }
                 }
             )
 
             #expect(
-                repositories.map(\.name.rawValue)
+                repositories.map(\.name.underlying)
                     == ["alpha", "alpha-later", "beta", "gamma"]
             )
         }
@@ -35,10 +35,10 @@ extension GitHub.Organization.Repositories {
                 order: .server
             )
 
-            #expect(repositories.map(\.id.rawValue) == [2, 1, 3])
+            #expect(repositories.map(\.id.underlying) == [2, 1, 3])
             await #expect(
                 throws: GitHub.Organization.Repositories.Traversal.Error<Fixture.Failure>.duplicate(
-                    .init(rawValue: 1)
+                    .init(1)
                 )
             ) {
                 try await client.all(
@@ -119,7 +119,7 @@ extension GitHub.Organization.Repositories {
             page: GitHub.Page.Number
         ) -> GitHub.Organization.Repositories.Request {
             .init(
-                organization: .init(rawValue: "swiftlang"),
+                organization: .init("swiftlang"),
                 type: .public,
                 page: page,
                 size: .maximum
@@ -147,8 +147,8 @@ extension GitHub.Organization.Repositories {
             name: String
         ) -> GitHub.Repository.Summary {
             .init(
-                id: .init(rawValue: id),
-                name: .init(rawValue: name),
+                id: .init(id),
+                name: .init(name),
                 archived: false,
                 disabled: false,
                 fork: false,

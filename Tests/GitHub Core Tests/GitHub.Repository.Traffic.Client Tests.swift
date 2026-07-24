@@ -21,8 +21,8 @@ extension GitHub.Repository.Traffic {
                     .init(referrers: [])
                 }
             )
-            let owner = GitHub.Owner.Login(rawValue: "swiftlang")
-            let repository = GitHub.Repository.Name(rawValue: "swift")
+            let owner = GitHub.Owner.Login("swiftlang")
+            let repository = GitHub.Repository.Name("swift")
 
             let views = try await client.views(
                 .init(owner: owner, repository: repository, interval: .day)
@@ -59,8 +59,8 @@ extension GitHub.Repository.Traffic {
                     throw .expected
                 }
             )
-            let owner = GitHub.Owner.Login(rawValue: "swiftlang")
-            let repository = GitHub.Repository.Name(rawValue: "swift")
+            let owner = GitHub.Owner.Login("swiftlang")
+            let repository = GitHub.Repository.Name("swift")
 
             let views = Views.Request(owner: owner, repository: repository)
             let clones = Clones.Request(owner: owner, repository: repository)
